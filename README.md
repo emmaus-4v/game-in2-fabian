@@ -1,9 +1,8 @@
 Deze game is gebaseerd op het template voor 4HV van het Emmauscollege Rotterdam
 
-## Mijn spel: *naam van het spel*
+## Mijn spel: *??? Slasher*
 Gemaakt door:
-- *naam van leerling 1*
-- *naam van leerling 2*
+- *Fabian Andruszkiewicz*
 
 ## Mijn planning
 
@@ -17,9 +16,9 @@ Basis: uitleg, spelen, afgaan en punten
 - [ ] uitlegscherm
 
 Uitbreiding: *bedenk iets, bijvoorbeeld meer tegenstanders*
-- [ ] *later uitwerken*
-- [ ] *later uitwerken*
-- [ ] *later uitwerken*
+- [ ] teken tegenstanders
+- [ ] beweeg tegenstanders
+- [ ] interactie tegenstanders met speler
 
 Uitbreiding: *bedenk iets, bijvoorbeeld bewegende achtergrond*
 - [ ] *later uitwerken*
