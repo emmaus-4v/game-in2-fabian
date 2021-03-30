@@ -11,19 +11,17 @@ Basis: uitleg, spelen, afgaan en punten
 - [ ] teken speler
 - [ ] beweeg speler
 - [ ] ... *(vul zelf aan)*
-- [ ] punten op scherm zetten
-- [ ] punten kunnen scoren
+- [ ] punten op scherm zetten & punten weghalen
 - [ ] uitlegscherm
 
-Uitbreiding: *bedenk iets, bijvoorbeeld meer tegenstanders*
+Uitbreiding: tegenstanders
 - [ ] teken tegenstanders
 - [ ] beweeg tegenstanders
 - [ ] interactie tegenstanders met speler
 
-Uitbreiding: *bedenk iets, bijvoorbeeld bewegende achtergrond*
-- [ ] *later uitwerken*
-- [ ] *later uitwerken*
-- [ ] *later uitwerken*
+Uitbreiding: speler abilities
+- [ ] tegenstanders aanvallen + extra punten scoren
+- [ ] speler dash
 
 ## Credits
 - Game template van het Emmauscollege Rotterdam https://github.com/emmauscollege/4HV-game-template
