@@ -25,6 +25,10 @@ var spelStatus = SPELEN;
 var spelerX = 200; // x-positie van speler
 var spelerY = 600; // y-positie van speler
 
+var playerVelocityX = 0; // x-snelheid van speler
+var playerVelocityY = 0; // y-snelheid van speler
+var playerJumping = false;
+
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
 
@@ -99,6 +103,10 @@ var beweegKogel = function() {
 
 };
 
+/**
+ * Gravity en physics voor het springen van de player
+ */
+
 
 /**
  * Kijkt wat de toetsen/muis etc zijn.
@@ -107,15 +115,36 @@ var beweegKogel = function() {
 var beweegSpeler = function() {
     
     /* Standard movement (arrow keys) */
+
     if (keyIsDown(39) && keyIsDown(37)) {
-    } else if (keyIsDown(39)) {
-        spelerX = spelerX + 4;    
-    } else if (keyIsDown(37)) {
-        spelerX = spelerX - 4;
+        playerVelocityX = 0;
     };
+    
+    if (keyIsDown(39)) {
+        playerVelocityX = 4;
+        spelerX = spelerX + playerVelocityX;
+    };
+    
+    if (keyIsDown(37)) {
+        playerVelocityX = 4;
+        spelerX = spelerX - playerVelocityX;
+    };
+    
+    if (playerVelocityX > 0) {
+        playerVelocityX = playerVelocityX - 0.1;
+    };
+
 
     /* Player jumping (up key) */
     if (keyIsDown(38)) {
+        playerVelocityY = 4;
+        spelerY = spelerY - playerVelocityY;
+        playerJumping = true;
+        return playerJumping;
+    };
+
+    if (playerJumping = true) {
+        playerVelocityY = playerVelocityY - 0.1;
     };
 
 };
@@ -177,6 +206,7 @@ function draw() {
       beweegVijand();
       beweegKogel();
       beweegSpeler();
+
       
       if (checkVijandGeraakt()) {
         // punten erbij
