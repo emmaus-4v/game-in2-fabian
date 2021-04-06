@@ -11,7 +11,7 @@ Basis: uitleg, spelen, afgaan en punten
 - [ ] teken speler
 - [ ] beweeg speler
 - [ ] ... *(vul zelf aan)*
-- [ ] punten op scherm zetten & punten weghalen
+- [x] punten op scherm zetten & punten weghalen
 - [ ] uitlegscherm
 
 Uitbreiding: tegenstanders

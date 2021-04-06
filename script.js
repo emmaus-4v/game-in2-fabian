@@ -22,11 +22,15 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
+const KEY_ARROW_LEFT = 37;
+const KEY_ARROW_RIGHT = 39;
+
 var spelerX = 200; // x-positie van speler
 var spelerY = 600; // y-positie van speler
 
 var playerVelocityX = 0; // x-snelheid van speler
 var playerVelocityY = 0; // y-snelheid van speler
+var playerMaxSpeedX = 4; // maximale x-snelheid van speler
 var playerJumping = false;
 
 var kogelX = 0;    // x-positie van kogel
@@ -35,7 +39,7 @@ var kogelY = 0;    // y-positie van kogel
 var vijandX = 0;   // x-positie van vijand
 var vijandY = 0;   // y-positie van vijand
 
-var score = 0; // aantal behaalde punten
+var score = 9999; // aantal behaalde punten
 
 
 
@@ -53,6 +57,17 @@ var tekenVeld = function () {
   fill("purple");
   rect(20, 20, width - 2 * 20, height - 2 * 20);
 };
+
+
+/**
+ * Score berekening
+ */
+var scoreMechanics = function() {
+    fill(0, 0, 0);
+    textSize(40);
+    text("Score: " + score, 30, 60);
+    score = --score;
+}
 
 
 /**
@@ -103,10 +118,6 @@ var beweegKogel = function() {
 
 };
 
-/**
- * Gravity en physics voor het springen van de player
- */
-
 
 /**
  * Kijkt wat de toetsen/muis etc zijn.
@@ -116,24 +127,26 @@ var beweegSpeler = function() {
     
     /* Standard movement (arrow keys) */
 
-    if (keyIsDown(39) && keyIsDown(37)) {
+    /* aanpassen van de snelheid */
+    if (keyIsDown(KEY_ARROW_RIGHT) && keyIsDown(KEY_ARROW_LEFT)) {
         playerVelocityX = 0;
     };
     
-    if (keyIsDown(39)) {
-        playerVelocityX = 4;
-        spelerX = spelerX + playerVelocityX;
+    if (keyIsDown(KEY_ARROW_RIGHT)) {
+        playerVelocityX = playerMaxSpeedX;
+    
     };
     
-    if (keyIsDown(37)) {
-        playerVelocityX = 4;
-        spelerX = spelerX - playerVelocityX;
+    if (keyIsDown(KEY_ARROW_LEFT)) {
+        playerVelocityX = -1*playerMaxSpeedX;
     };
     
     if (playerVelocityX > 0) {
         playerVelocityX = playerVelocityX - 0.1;
     };
 
+    /* aanpassen van x op basis van de snelheid */
+        spelerX = spelerX + playerVelocityX;
 
     /* Player jumping (up key) */
     if (keyIsDown(38)) {
@@ -219,6 +232,7 @@ function draw() {
       }
 
       tekenVeld();
+      scoreMechanics();
       tekenVijand(vijandX, vijandY);
       tekenKogel(kogelX, kogelY);
       tekenSpeler(spelerX, spelerY);
