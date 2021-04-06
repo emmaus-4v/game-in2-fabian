@@ -22,8 +22,10 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
+/* keycodes van toetsenbord */
 const KEY_ARROW_LEFT = 37;
 const KEY_ARROW_RIGHT = 39;
+const KEY_ARROW_UP = 38;
 
 var spelerX = 200; // x-positie van speler
 var spelerY = 600; // y-positie van speler
@@ -31,7 +33,7 @@ var spelerY = 600; // y-positie van speler
 var playerVelocityX = 0; // x-snelheid van speler
 var playerVelocityY = 0; // y-snelheid van speler
 var playerMaxSpeedX = 4; // maximale x-snelheid van speler
-var playerJumping = false;
+var playerMaxSpeedY = 8; // maximale y-snelheid van speler
 
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
@@ -39,7 +41,7 @@ var kogelY = 0;    // y-positie van kogel
 var vijandX = 0;   // x-positie van vijand
 var vijandY = 0;   // y-positie van vijand
 
-var score = 9999; // aantal behaalde punten
+var score = 99; // aantal behaalde punten
 
 
 
@@ -54,7 +56,7 @@ var score = 9999; // aantal behaalde punten
  * Tekent het speelveld
  */
 var tekenVeld = function () {
-  fill("purple");
+  fill(69, 207, 245);
   rect(20, 20, width - 2 * 20, height - 2 * 20);
 };
 
@@ -66,8 +68,10 @@ var scoreMechanics = function() {
     fill(0, 0, 0);
     textSize(40);
     text("Score: " + score, 30, 60);
-    score = --score;
-}
+    if (score > 0) {
+        score = --score;
+    };
+};
 
 
 /**
@@ -128,36 +132,38 @@ var beweegSpeler = function() {
     /* Standard movement (arrow keys) */
 
     /* aanpassen van de snelheid */
+    spelerX = spelerX + playerVelocityX;
+
     if (keyIsDown(KEY_ARROW_RIGHT) && keyIsDown(KEY_ARROW_LEFT)) {
         playerVelocityX = 0;
     };
     
     if (keyIsDown(KEY_ARROW_RIGHT)) {
         playerVelocityX = playerMaxSpeedX;
-    
     };
     
     if (keyIsDown(KEY_ARROW_LEFT)) {
-        playerVelocityX = -1*playerMaxSpeedX;
+        playerVelocityX = -1 * playerMaxSpeedX;
     };
     
     if (playerVelocityX > 0) {
-        playerVelocityX = playerVelocityX - 0.1;
+        playerVelocityX = playerVelocityX - 0.4;
     };
 
-    /* aanpassen van x op basis van de snelheid */
-        spelerX = spelerX + playerVelocityX;
+    if (playerVelocityX < 0) {
+        playerVelocityX = playerVelocityX + 0.4;
+    };
+    
 
     /* Player jumping (up key) */
-    if (keyIsDown(38)) {
-        playerVelocityY = 4;
-        spelerY = spelerY - playerVelocityY;
-        playerJumping = true;
-        return playerJumping;
+    spelerY = spelerY + playerVelocityY;
+
+    if (keyIsDown(KEY_ARROW_UP)) {
+        playerVelocityY = -1 * playerMaxSpeedY;
     };
 
-    if (playerJumping = true) {
-        playerVelocityY = playerVelocityY - 0.1;
+    if (playerVelocityY < 0 || playerVelocityY > 0) {
+        playerVelocityY = playerVelocityY + 0.3;
     };
 
 };
