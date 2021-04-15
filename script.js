@@ -24,6 +24,7 @@ var spelStatus = SPELEN;
 
 /* keycodes van toetsenbord */
 const KEY_SHIFT = 16;
+const KEY_SPACE = 32;
 const KEY_ARROW_UP = 38;
 const KEY_ARROW_LEFT = 37;
 const KEY_ARROW_RIGHT = 39;
@@ -36,11 +37,11 @@ var playerVelocityY = 0; // y-snelheid van speler
 var playerMaxSpeedX = 4; // maximale x-snelheid van speler
 var playerMaxSpeedY = 6; // maximale y-snelheid van speler
 
+var vijandX = 600;   // x-positie van vijand
+var vijandY = 600;   // y-positie van vijand
+
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
-
-var vijandX = 0;   // x-positie van vijand
-var vijandY = 0;   // y-positie van vijand
 
 var score = 9999; // aantal behaalde punten
 
@@ -81,8 +82,8 @@ var tekenScore = function() {
  * @param {number} y y-coördinaat
  */
 var tekenVijand = function(x, y) {
-    
-
+    fill("red");
+    ellipse(x, y, 40, 40);
 };
 
 
@@ -119,9 +120,7 @@ var beweegVijand = function() {
 /**
  * Updatet globale variabelen met positie van kogel of bal
  */
-var beweegKogel = function() {
 
-};
 
 
 /**
@@ -185,7 +184,21 @@ var beweegSpeler = function() {
  */
 var checkVijandGeraakt = function() {
 
-  return false;
+    if (vijandX + 80 < spelerX  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
+
+    } else if (keyIsDown(KEY_SPACE)) {
+        vijandY = 1000;
+        score = score + 100;
+    };
+
+    if (vijandX + 40 < spelerX  ||  vijandX > spelerX + 40 || vijandY + 40 < spelerY || vijandY > spelerY + 40) {
+
+    } else if (playerVelocityX > playerMaxSpeedX) {
+        vijandY = 1000;
+        score = score + 100;
+    };
+
+    return false;
 };
 
 
@@ -196,7 +209,12 @@ var checkVijandGeraakt = function() {
  */
 var checkSpelerGeraakt = function() {
     
-  return false;
+    if (vijandX + 40 < spelerX  ||  vijandX > spelerX + 40 || vijandY + 40 < spelerY || vijandY > spelerY + 40) {
+    } else if (playerVelocityX <= playerMaxSpeedX) {
+        /* Wat gebeurt er als de speler geraakt wordt */
+    };
+    
+    return false;
 };
 
 
@@ -220,7 +238,7 @@ function setup() {
   createCanvas(1280, 720);
 
   // Kleur de achtergrond blauw, zodat je het kunt zien
-  background('blue');
+  background('grey');
 }
 
 
@@ -232,30 +250,21 @@ function setup() {
 function draw() {
   switch (spelStatus) {
     case SPELEN:
-      beweegVijand();
-      beweegKogel();
-      beweegSpeler();
-
+        beweegVijand();
+        beweegSpeler();
       
-      if (checkVijandGeraakt()) {
-        // punten erbij
-        // nieuwe vijand maken
-      }
-      
-      if (checkSpelerGeraakt()) {
-        // leven eraf of gezondheid verlagen
-        // eventueel: nieuwe speler maken
-      }
+        checkVijandGeraakt();
+        checkSpelerGeraakt();
 
-      tekenVeld();
-      tekenScore();
-      tekenVijand(vijandX, vijandY);
-      tekenKogel(kogelX, kogelY);
-      tekenSpeler(spelerX, spelerY);
+        tekenVeld();
+        tekenScore();
+        tekenVijand(vijandX, vijandY);
+        tekenKogel(kogelX, kogelY);
+        tekenSpeler(spelerX, spelerY);
 
-      if (checkGameOver()) {
-        spelStatus = GAMEOVER;
-      }
-      break;
-  }
+        if (checkGameOver()) {
+            spelStatus = GAMEOVER;
+        }
+        break;
+    }
 }
