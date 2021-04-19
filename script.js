@@ -22,26 +22,36 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
+
 /* keycodes van toetsenbord */
 const KEY_SHIFT = 16;
+    var lastPressedKEY_SHIFT = false;
+    var currentPressedKEY_SHIFT = false;
 const KEY_SPACE = 32;
 const KEY_ARROW_UP = 38;
+    var lastPressedKEY_ARROW_UP = false;
+    var currentPressedKEY_ARROW_UP = false;
 const KEY_ARROW_LEFT = 37;
 const KEY_ARROW_RIGHT = 39;
+
 
 var spelerX = 200; // x-positie van speler
 var spelerY = 600; // y-positie van speler
 
+
 var playerVelocityX = 0; // x-snelheid van speler
 var playerVelocityY = 0; // y-snelheid van speler
 var playerMaxSpeedX = 4; // maximale x-snelheid van speler
-var playerMaxSpeedY = 6; // maximale y-snelheid van speler
+var playerMaxSpeedY = 8; // maximale y-snelheid van speler
+
 
 var vijandX = 600;   // x-positie van vijand
 var vijandY = 600;   // y-positie van vijand
 
+
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
+
 
 var score = 9999; // aantal behaalde punten
 
@@ -131,17 +141,20 @@ var beweegSpeler = function() {
 
     /* aanpassen van de x-snelheid */
     spelerX = spelerX + playerVelocityX;
+
     
     /* speler naar rechts bewegen */
     if (keyIsDown(KEY_ARROW_RIGHT)) {
         playerVelocityX = playerMaxSpeedX;
     };
     
+
     /* speler naar links bewegen */
     if (keyIsDown(KEY_ARROW_LEFT)) {
         playerVelocityX = -1 * playerMaxSpeedX;
     };
     
+
     /* speler rustig laten stoppen */
     if (playerVelocityX > 0) {
         playerVelocityX = playerVelocityX - 0.4;
@@ -159,10 +172,15 @@ var beweegSpeler = function() {
     /* aanpassen van de y-snelheid */
     spelerY = spelerY + playerVelocityY;
 
+
     /* speler laten springen */
-    if (keyIsDown(KEY_ARROW_UP)) {
+    lastPressedKEY_ARROW_UP = currentPressedKEY_ARROW_UP;
+    currentPressedKEY_ARROW_UP = keyIsDown(KEY_ARROW_UP);
+
+    if ((lastPressedKEY_ARROW_UP == false) && (currentPressedKEY_ARROW_UP == true)) {
         playerVelocityY = -1 * playerMaxSpeedY;
     };
+
 
     /* speler laten vallen */
     if (playerVelocityY < 0 || playerVelocityY > 0) {
@@ -171,8 +189,12 @@ var beweegSpeler = function() {
 
 
     /* speler laten dashen */
-    if (keyIsDown(KEY_SHIFT)) {
+    if (keyIsDown(KEY_SHIFT) && playerVelocityX > 0) {
         playerVelocityX = 3 * playerMaxSpeedX;
+    };
+    
+    if (keyIsDown(KEY_SHIFT) && playerVelocityX < 0) {
+        playerVelocityX = -3 * playerMaxSpeedX;
     };
 
 };
@@ -184,16 +206,19 @@ var beweegSpeler = function() {
  */
 var checkVijandGeraakt = function() {
 
-    if (vijandX + 80 < spelerX  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
+    /* wanneer speler vijand raakt */
+    if (vijandX + 80 < spelerX /*+ 40*/ /*Voor de direction*/  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
 
     } else if (keyIsDown(KEY_SPACE)) {
         vijandY = 1000;
         score = score + 100;
     };
 
+
+    /* wanneer speler in de vijand dashet */
     if (vijandX + 40 < spelerX  ||  vijandX > spelerX + 40 || vijandY + 40 < spelerY || vijandY > spelerY + 40) {
 
-    } else if (playerVelocityX > playerMaxSpeedX) {
+    } else if (playerVelocityX > playerMaxSpeedX || playerVelocityX < -1 * playerMaxSpeedX) {
         vijandY = 1000;
         score = score + 100;
     };
@@ -261,6 +286,8 @@ function draw() {
         tekenVijand(vijandX, vijandY);
         tekenKogel(kogelX, kogelY);
         tekenSpeler(spelerX, spelerY);
+
+        console.log(playerVelocityX);
 
         if (checkGameOver()) {
             spelStatus = GAMEOVER;
