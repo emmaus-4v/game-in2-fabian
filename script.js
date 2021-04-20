@@ -28,6 +28,8 @@ const KEY_SHIFT = 16;
     var lastPressedKEY_SHIFT = false;
     var currentPressedKEY_SHIFT = false;
 const KEY_SPACE = 32;
+    var lastPressedKEY_SPACE = false;
+    var currentPressedKEY_SPACE = false;
 const KEY_ARROW_UP = 38;
     var lastPressedKEY_ARROW_UP = false;
     var currentPressedKEY_ARROW_UP = false;
@@ -164,6 +166,10 @@ var beweegSpeler = function() {
         playerVelocityX = playerVelocityX + 0.4;
     };
 
+    if ((playerVelocityX > 0 && playerVelocityX < 0.4) || (playerVelocityX < 0 && playerVelocityX > -0.4)) {
+        playerVelocityX = 0;
+    };
+
     if (keyIsDown(KEY_ARROW_RIGHT) && keyIsDown(KEY_ARROW_LEFT)) {
         playerVelocityX = 0;
     };
@@ -189,11 +195,14 @@ var beweegSpeler = function() {
 
 
     /* speler laten dashen */
-    if (keyIsDown(KEY_SHIFT) && playerVelocityX > 0) {
+    lastPressedKEY_SHIFT = currentPressedKEY_SHIFT;
+    currentPressedKEY_SHIFT = keyIsDown(KEY_SHIFT);
+
+    if (((lastPressedKEY_SHIFT == false) && (currentPressedKEY_SHIFT == true)) && playerVelocityX > 0) {
         playerVelocityX = 3 * playerMaxSpeedX;
     };
     
-    if (keyIsDown(KEY_SHIFT) && playerVelocityX < 0) {
+    if (((lastPressedKEY_SHIFT == false) && (currentPressedKEY_SHIFT == true)) && playerVelocityX < 0) {
         playerVelocityX = -3 * playerMaxSpeedX;
     };
 
@@ -207,9 +216,12 @@ var beweegSpeler = function() {
 var checkVijandGeraakt = function() {
 
     /* wanneer speler vijand raakt */
+    lastPressedKEY_SPACE = currentPressedKEY_SPACE;
+    currentPressedKEY_SPACE = keyIsDown(KEY_SPACE);
+
     if (vijandX + 80 < spelerX /*+ 40*/ /*Voor de direction*/  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
 
-    } else if (keyIsDown(KEY_SPACE)) {
+    } else if (((lastPressedKEY_SPACE == false) && (currentPressedKEY_SPACE == true))) {
         vijandY = 1000;
         score = score + 100;
     };
@@ -235,11 +247,12 @@ var checkVijandGeraakt = function() {
 var checkSpelerGeraakt = function() {
     
     if (vijandX + 40 < spelerX  ||  vijandX > spelerX + 40 || vijandY + 40 < spelerY || vijandY > spelerY + 40) {
+
     } else if (playerVelocityX <= playerMaxSpeedX) {
-        /* Wat gebeurt er als de speler geraakt wordt */
+        return true;
+    } else {
+        return false;
     };
-    
-    return false;
 };
 
 
@@ -292,6 +305,10 @@ function draw() {
         if (checkGameOver()) {
             spelStatus = GAMEOVER;
         }
+        break;
+    
+    case GAMEOVER:
+        // doe iets
         break;
     }
 }
