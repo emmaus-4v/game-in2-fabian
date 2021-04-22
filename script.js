@@ -43,8 +43,10 @@ var spelerY = 600; // y-positie van speler
 
 var playerVelocityX = 0; // x-snelheid van speler
 var playerVelocityY = 0; // y-snelheid van speler
-var playerMaxSpeedX = 4; // maximale x-snelheid van speler
-var playerMaxSpeedY = 8; // maximale y-snelheid van speler
+var playerSmoothStopX = 0.4; // vertraging van speler op de x-as
+var playerSmoothStopY = 0.3; // vertraging van speler op de y-as
+var playerMaxSpeedX = 4 + playerSmoothStopX; // maximale x-snelheid van speler
+var playerMaxSpeedY = 8 + playerSmoothStopY; // maximale y-snelheid van speler
 
 
 var vijandX = 600;   // x-positie van vijand
@@ -159,14 +161,14 @@ var beweegSpeler = function() {
 
     /* speler rustig laten stoppen */
     if (playerVelocityX > 0) {
-        playerVelocityX = playerVelocityX - 0.4;
+        playerVelocityX = playerVelocityX - playerSmoothStopX;
     };
 
     if (playerVelocityX < 0) {
-        playerVelocityX = playerVelocityX + 0.4;
+        playerVelocityX = playerVelocityX + playerSmoothStopX;
     };
 
-    if ((playerVelocityX > 0 && playerVelocityX < 0.4) || (playerVelocityX < 0 && playerVelocityX > -0.4)) {
+    if ((playerVelocityX > 0 && playerVelocityX < playerSmoothStopX) || (playerVelocityX < 0 && playerVelocityX > -playerSmoothStopX)) {
         playerVelocityX = 0;
     };
 
@@ -190,7 +192,7 @@ var beweegSpeler = function() {
 
     /* speler laten vallen */
     if (playerVelocityY < 0 || playerVelocityY > 0) {
-        playerVelocityY = playerVelocityY + 0.3;
+        playerVelocityY = playerVelocityY + playerSmoothStopY;
     };
 
 
@@ -257,6 +259,23 @@ var checkSpelerGeraakt = function() {
 
 
 /**
+ * Tekent het gameoverveld
+ */
+var tekenGameover = function() {
+
+    fill(255, 0, 0);
+    rect(20, 20, width - 2 * 20, height - 2 * 20);
+
+    fill(0, 0, 0);
+    textSize(160);
+    text("GAME OVER", 150, 300);
+
+    textSize(80);
+    text("Restart", 500, 500);
+}
+
+
+/**
  * Zoekt uit of het spel is afgelopen
  * @returns {boolean} true als het spel is afgelopen
  */
@@ -288,6 +307,7 @@ function setup() {
 function draw() {
   switch (spelStatus) {
     case SPELEN:
+        
         beweegVijand();
         beweegSpeler();
       
@@ -300,15 +320,16 @@ function draw() {
         tekenKogel(kogelX, kogelY);
         tekenSpeler(spelerX, spelerY);
 
-        console.log(playerVelocityX);
+        console.log(textWidth("GAME OVER"));
 
-        if (checkGameOver()) {
+        if (checkSpelerGeraakt()) {
             spelStatus = GAMEOVER;
         }
         break;
     
     case GAMEOVER:
-        // doe iets
+        
+        tekenGameover();
         break;
     }
 }
