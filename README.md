@@ -9,7 +9,7 @@ Gemaakt door:
 Basis: uitleg, spelen, afgaan en punten
 - [x] maak index.html, style.css en script.js met canvas
 - [ ] teken speler
-- [ ] beweeg speler
+- [x] beweeg speler
 - [ ] ... *(vul zelf aan)*
 - [x] punten op scherm zetten & punten weghalen
 - [ ] uitlegscherm

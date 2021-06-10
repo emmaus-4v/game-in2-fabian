@@ -49,6 +49,9 @@ var playerMaxSpeedX = 4 + playerSmoothStopX; // maximale x-snelheid van speler
 var playerMaxSpeedY = 8 + playerSmoothStopY; // maximale y-snelheid van speler
 
 
+var dashAmount = 3 // hoeveelheid dashes dat de speler heeft
+
+
 var vijandX = 600;   // x-positie van vijand
 var vijandY = 600;   // y-positie van vijand
 
@@ -58,6 +61,7 @@ var kogelY = 0;    // y-positie van kogel
 
 
 var score = 9999; // aantal behaalde punten
+var killScore = 100 // aantal behaalde punten voor vijand verslaan
 
 
 
@@ -132,9 +136,13 @@ var beweegVijand = function() {
 
 
 /**
- * Updatet globale variabelen met positie van kogel of bal
+ * Tekent en telt de hoeveelheid dashes van de speler
  */
-
+var tekenDashes = function() {
+    fill(0, 0, 0);
+    textSize(40);
+    text(dashAmount, 30, 680);
+};
 
 
 /**
@@ -148,13 +156,13 @@ var beweegSpeler = function() {
 
     
     /* speler naar rechts bewegen */
-    if (keyIsDown(KEY_ARROW_RIGHT)) {
+    if (keyIsDown(KEY_ARROW_RIGHT) && playerVelocityX <= playerMaxSpeedX) {
         playerVelocityX = playerMaxSpeedX;
     };
     
 
     /* speler naar links bewegen */
-    if (keyIsDown(KEY_ARROW_LEFT)) {
+    if (keyIsDown(KEY_ARROW_LEFT) && playerVelocityX >= -playerMaxSpeedX) {
         playerVelocityX = -1 * playerMaxSpeedX;
     };
     
@@ -221,11 +229,11 @@ var checkVijandGeraakt = function() {
     lastPressedKEY_SPACE = currentPressedKEY_SPACE;
     currentPressedKEY_SPACE = keyIsDown(KEY_SPACE);
 
-    if (vijandX + 80 < spelerX /*+ 40*/ /*Voor de direction*/  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
+    if (vijandX + 80 < spelerX  ||  vijandX > spelerX + 80 || vijandY + 80 < spelerY || vijandY > spelerY + 80) {
 
     } else if (((lastPressedKEY_SPACE == false) && (currentPressedKEY_SPACE == true))) {
         vijandY = 1000;
-        score = score + 100;
+        score = score + killScore;
     };
 
 
@@ -270,6 +278,7 @@ var tekenGameover = function() {
     textSize(160);
     text("GAME OVER", 150, 300);
 
+    fill(0, 0, 0);
     textSize(80);
     text("Restart", 500, 500);
 }
@@ -294,7 +303,7 @@ function setup() {
   // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
   createCanvas(1280, 720);
 
-  // Kleur de achtergrond blauw, zodat je het kunt zien
+  // Kleur de achtergrond grijs, zodat je het kunt zien
   background('grey');
 }
 
@@ -320,11 +329,10 @@ function draw() {
         tekenKogel(kogelX, kogelY);
         tekenSpeler(spelerX, spelerY);
 
-        console.log(textWidth("GAME OVER"));
-
         if (checkSpelerGeraakt()) {
             spelStatus = GAMEOVER;
         }
+
         break;
     
     case GAMEOVER:
